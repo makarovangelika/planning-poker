@@ -1,6 +1,6 @@
 import { Registration } from "./models";
 
-const url = "http://localhost:80";
+const url = "http://localhost";
 let headers = new Headers();
 headers.append("Content-Type", "application/json");
 

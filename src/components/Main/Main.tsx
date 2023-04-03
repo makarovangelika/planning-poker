@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { registerUser } from '../../requests';
 import { NewRoomForm } from '../NewRoomForm/NewRoomForm';
+import { useSelector, useDispatch } from 'react-redux';
+import { State } from '../../models';
+import { register } from './RegistrationSlice';
 
 export function Main() {
     let [name, setName] = useState("");
-    let [token, setToken] = useState("");
+    const registration = useSelector((state: State) => state.registration);
+    const dispatch = useDispatch();
     let [isLoading, setIsLoading] = useState(true);
     let [error, setError] = useState(false);
     let handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -13,7 +17,7 @@ export function Main() {
     let signUp = () => {
         registerUser(name)
             .then(registration => {
-                setToken(registration.token);
+                dispatch(register(registration));
                 setIsLoading(false);
             })
             .catch(() => {
@@ -23,7 +27,7 @@ export function Main() {
     return (
         <div className="h-screen">
             <h1 className="text-2xl sm:text-3xl text-indigo-500 m-4">PoPlan - Planning Poker</h1>
-            { token ? <NewRoomForm /> :
+            { registration ? <NewRoomForm /> :
                 <div className="flex flex-col items-center justify-center h-1/2">
                     <h2 className="text-left w-4/5 sm:w-1/3 font-bold mb-6 text-2xl">Register</h2>
                     <input type='text' value={name} placeholder='Name' onChange={handleNameChange}
