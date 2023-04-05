@@ -9,7 +9,7 @@ export function Main() {
     let [name, setName] = useState("");
     const registration = useSelector((state: State) => state.registration);
     const dispatch = useDispatch();
-    let [isLoading, setIsLoading] = useState(true);
+    let [Loading, setLoading] = useState(true);
     let [error, setError] = useState(false);
     let handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
@@ -18,7 +18,7 @@ export function Main() {
         registerUser(name)
             .then(registration => {
                 dispatch(register(registration));
-                setIsLoading(false);
+                setLoading(false);
             })
             .catch(() => {
                 setError(true);
