@@ -46,3 +46,15 @@ export const getTemplates = async ():Promise<Template[]> => {
     
     return templateResponse.templates;
 }
+
+export const createRoom = async (name: string, voteTemplate: number) => {
+    const response = await fetch(`${url}/rooms`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+            name: name,
+            voteTemplate: voteTemplate
+        })
+    });
+    return await response.json();
+}
