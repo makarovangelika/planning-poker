@@ -1,5 +1,5 @@
-import { Registration, Template } from "./models";
-import { store } from "./store"
+import { IRoom, Registration, Template, VoteResponse } from "./models";
+import { store } from "./store";
 
 const url = "http://localhost";
 
@@ -47,7 +47,7 @@ export const getTemplates = async ():Promise<Template[]> => {
     return templateResponse.templates;
 }
 
-export const createRoom = async (name: string, voteTemplate: number) => {
+export const createRoom = async (name: string, voteTemplate: number): Promise<IRoom> => {
     const response = await fetch(`${url}/rooms`, {
         method: "POST",
         headers: getAuthHeaders(),
@@ -57,4 +57,23 @@ export const createRoom = async (name: string, voteTemplate: number) => {
         })
     });
     return await response.json();
+}
+
+export const getRoom = async (id: string) => {
+    const response = await fetch(`${url}/rooms/${id}`, {
+        headers: getAuthHeaders()
+    });
+    return await response.json();
+}
+
+export const voteRequest = async (id: string, value: number): Promise<VoteResponse> => {
+    const response = await fetch(`${url}/rooms/${id}/vote`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+            value: value
+        })
+    });
+    return await response.json();
+
 }

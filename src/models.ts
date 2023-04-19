@@ -23,3 +23,29 @@ export interface Vote {
     value: number,
     type: string
 }
+
+export interface ISeat {
+    user: User,
+    vote: Vote,
+    voted: boolean,
+    voteOpened: boolean,
+    owner: boolean,
+    active: boolean
+}
+
+export interface IRoom {
+    id: string,
+    name: string,
+    status: number,
+    owner: boolean,
+    seats: ISeat[],
+    templateTitle: string,
+    voteCards: {
+        vote: Vote,
+        active: boolean
+    }[]
+}
+
+export interface VoteResponse {
+    message: "Voted"
+}
