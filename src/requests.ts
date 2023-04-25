@@ -75,5 +75,20 @@ export const voteRequest = async (id: string, value: number): Promise<VoteRespon
         })
     });
     return await response.json();
+}
 
+export const endVote = async (id: string): Promise<IRoom> => {
+    const response = await fetch(`${url}/rooms/${id}/end`, {
+            method: "POST",
+            headers: getAuthHeaders()
+        });
+        return await response.json();
+}
+
+export const resetRoom = async (id: string): Promise<IRoom> => {
+    const response = await fetch(`${url}/rooms/${id}/reset`, {
+        method: 'POST',
+        headers: getAuthHeaders()
+    });
+    return await response.json();
 }

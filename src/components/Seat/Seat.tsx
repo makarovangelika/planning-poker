@@ -1,15 +1,18 @@
 import { voteToString } from "../../voteTemplates";
-import { ISeat } from "../../models";
+import { ISeat, IRoom, statusVoted } from "../../models";
 
 interface SeatProps {
-    seat: ISeat
+    seat: ISeat,
+    room: IRoom
 }
 
-export function Seat({ seat }: SeatProps) {
-    const seatColor = seat.voted ? "bg-indigo-500" : "bg-slate-300"
+export function Seat({ seat, room }: SeatProps) {
+    const seatColor = `text-slate-50 + ${seat.voted ? "bg-indigo-500" : "bg-slate-300"}`;
+    const revealedSeatsClass = room.status === statusVoted ? "border-2 border-indigo-500 text-indigo-500" :
+    seatColor;
     return (
-        <div className="flex flex-col items-center">
-            <div className={`rounded-md ${seatColor} text-indigo-500 w-8 h-14 m-1 flex justify-center items-center`}>{seat.voteOpened && voteToString(seat.vote)}</div>
+        <div className="flex flex-col items-center m-1">
+            <div className={`rounded-md ${revealedSeatsClass} w-9 h-16 flex justify-center items-center`}>{seat.voteOpened && voteToString(seat.vote)}</div>
             <span className="text-base font-bold">{seat.user.name}</span>
         </div>
     )
