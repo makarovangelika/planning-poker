@@ -1,11 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { endVote, getRoom, resetRoom } from "../../requests";
-import { IRoom, statusVoted, statusVoting } from "../../models";
+import { endVote, getRoom, resetRoom, url } from "../../requests";
+import { IRoom, statusVoted, Registration } from "../../models";
 import { Card } from "../Card/Card";
 import { Seat } from "../Seat/Seat";
 
-export function Room() {
+interface RoomProps {
+    user: Registration
+}
+
+export function Room({ user } : RoomProps) {
     const { id } = useParams();
     const [ room, setRoom ] = useState<IRoom>();
     const buttonStyle = "font-bold bg-indigo-500 hover:opacity-50 ease-in-out duration-200 rounded-md text-slate-50 py-3 px-6 mt-3";
@@ -15,12 +19,33 @@ export function Room() {
     const handleEndVote = () => {
             endVote(id || '');
     }
+    
+    let wsConn: WebSocket | null = null;
+    const urlInstance = new URL(url)
+    urlInstance.protocol = urlInstance.protocol === 'https:' ? 'wss:' : 'ws:';
+
     useEffect(() => {
         getRoom(id || '')
             .then((room: IRoom) => {
                 setRoom(room);
             })
-    }, [])
+            .then(() => {
+                if (wsConn) {
+                    return
+                }
+                wsConn = new WebSocket(`${urlInstance.href}rooms/${id}/subscribe?authorization=${user.token}`);
+                wsConn.addEventListener('message', (wsEvent => {
+                    let room = JSON.parse(wsEvent.data);
+                    setRoom(room);
+                }))
+            })
+            return () => {
+                if (wsConn) {
+                    wsConn.close();
+                    wsConn = null
+                }
+            }
+    }, []);
     return (
         room ?
             <div className="flex flex-col items-center">

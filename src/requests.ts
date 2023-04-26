@@ -1,7 +1,7 @@
 import { IRoom, Registration, Template, VoteResponse } from "./models";
 import { store } from "./store";
 
-const url = "http://localhost";
+export const url = "http://localhost";
 
 function getHeaders(): Headers
 {

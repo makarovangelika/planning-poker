@@ -18,7 +18,7 @@ function App() {
       </header>
       <Routes>
         <Route path='/' element={<Main />} />
-        <Route path='/rooms/:id' element={<Room />}  />
+        <Route path='/rooms/:id' element={<Room user={currentUser} />}  />
       </Routes>
     </div>
   );
