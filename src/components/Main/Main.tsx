@@ -3,7 +3,7 @@ import { registerUser } from '../../requests';
 import { NewRoomForm } from '../NewRoomForm/NewRoomForm';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../../models';
-import { register } from './RegistrationSlice';
+import { register } from '../../store/RegistrationSlice';
 
 export function Main() {
     let [name, setName] = useState("");

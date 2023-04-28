@@ -1,6 +1,6 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { endVote, getRoom, resetRoom, url } from "../../requests";
+import { endVote, getRoom, leaveRoom, resetRoom, url } from "../../requests";
 import { IRoom, statusVoted, Registration } from "../../models";
 import { Card } from "../Card/Card";
 import { Seat } from "../Seat/Seat";
@@ -12,6 +12,7 @@ interface RoomProps {
 export function Room({ user } : RoomProps) {
     const { id } = useParams();
     const [ room, setRoom ] = useState<IRoom>();
+    const navigate = useNavigate();
     const buttonStyle = "font-bold bg-indigo-500 hover:opacity-50 ease-in-out duration-200 rounded-md text-slate-50 py-3 px-6 mt-3";
     const handleResetRoom = () => {
         resetRoom(id || '');
@@ -19,7 +20,10 @@ export function Room({ user } : RoomProps) {
     const handleEndVote = () => {
             endVote(id || '');
     }
-    
+    const handleLeaveRoom = () => {
+        leaveRoom(id || '');
+        navigate('/');
+    }
     let wsConn: WebSocket | null = null;
     const urlInstance = new URL(url)
     urlInstance.protocol = urlInstance.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -48,34 +52,42 @@ export function Room({ user } : RoomProps) {
     }, []);
     return (
         room ?
-            <div className="flex flex-col items-center">
-                <h2 className="text-xl sm:text-2xl text-indigo-500 mb-6">{room.name}</h2>
-                <div className="flex justify-center flex-wrap">
-                    {room.seats.map(seat => {
-                        return <Seat room={room} seat={seat} key={seat.user.id} />
-                    })}
+            <>
+                <div className="relative">
+                    <button
+                        className={`${buttonStyle} text-base sm:text-lg px-3 py-2 absolute right-0`}
+                        onClick={handleLeaveRoom}>Leave room
+                    </button>
                 </div>
-                {room.owner ?
-                    (room.status === statusVoted ?
-                        <button className={buttonStyle}
-                            onClick={handleResetRoom}>
-                                Reset room
-                        </button> :
-                        <button className={buttonStyle}
-                            onClick={handleEndVote}>
-                                Show cards
-                        </button>
-                    ):
-                    <div className="rounded-md bg-indigo-500 opacity-50 text-slate-50 p-6 mt-3">
-                        {room.status === statusVoted ? "Vote ended" : "Waiting for players' votes..."}
+                <div className="flex flex-col items-center">
+                    <h2 className="text-xl sm:text-2xl text-indigo-500 mb-8">{room.name}</h2>
+                    <div className="flex justify-center flex-wrap">
+                        {room.seats.map(seat => {
+                            return <Seat room={room} seat={seat} active={seat.active} key={seat.user.id} />
+                        })}
                     </div>
-                }
-                <div className="mt-6 flex justify-center flex-wrap gap-y-1">
-                    {room.voteCards.map((card, index) => {
-                        return <Card disabled={room.status === statusVoted} vote={card} key={index} value={index}/>
-                    })}
+                    {room.owner ?
+                        (room.status === statusVoted ?
+                            <button className={buttonStyle}
+                                onClick={handleResetRoom}>
+                                    Reset room
+                            </button> :
+                            <button className={buttonStyle}
+                                onClick={handleEndVote}>
+                                    Show cards
+                            </button>
+                        ):
+                        <div className="rounded-md bg-indigo-500 opacity-50 text-slate-50 p-6 mt-3">
+                            {room.status === statusVoted ? "Vote ended" : "Waiting for players' votes..."}
+                        </div>
+                    }
+                    <div className="mt-6 flex justify-center flex-wrap gap-y-1">
+                        {room.voteCards.map((card, index) => {
+                            return <Card disabled={room.status === statusVoted} vote={card} key={index} value={index}/>
+                        })}
+                    </div>
                 </div>
-            </div> :
+            </> :
             <span>Loading</span>
     )
 }

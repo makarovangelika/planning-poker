@@ -1,5 +1,6 @@
 import { IRoom, Registration, Template, VoteResponse } from "./models";
-import { store } from "./store";
+import { store } from "./store/store";
+import { register } from './store/RegistrationSlice';
 
 export const url = "http://localhost";
 
@@ -87,6 +88,14 @@ export const endVote = async (id: string): Promise<IRoom> => {
 
 export const resetRoom = async (id: string): Promise<IRoom> => {
     const response = await fetch(`${url}/rooms/${id}/reset`, {
+        method: 'POST',
+        headers: getAuthHeaders()
+    });
+    return await response.json();
+}
+
+export const leaveRoom = async(id: string) => {
+    const response = await fetch(`${url}/rooms/${id}/leave`, {
         method: 'POST',
         headers: getAuthHeaders()
     });

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Registration } from '../../models';
-import { loadFromLocalStorage } from '../../localStorage';
+import { Registration } from '../models';
+import { loadFromLocalStorage } from '../localStorage';
 
 let initialState: Registration | null = loadFromLocalStorage();
 
