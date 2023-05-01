@@ -1,26 +1,33 @@
 import { IRoom, Registration, Template, VoteResponse } from "./models";
 import { store } from "./store/store";
-import { register } from './store/RegistrationSlice';
+import { unregister } from './store/RegistrationSlice';
 
 export const url = "http://localhost";
 
-function getHeaders(): Headers
-{
-    return new Headers({
-        "Content-Type": "application/json"
-    })
+function appendHeaders(key: string, value: string, init?: RequestInit): RequestInit {
+    if (!init) {
+        init = {}
+    }
+    let headers: HeadersInit = init.headers ? new Headers(init.headers) : new Headers();
+    headers.set(key, value);
+    init.headers = headers;
+    return init;
 }
 
-function getAuthHeaders(): Headers
-{
-    const headers = getHeaders();
-
+async function authFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    init = appendHeaders("Content-Type", "application/json", init);
     const token = store.getState().registration?.token;
     if (token) {
-        headers.append("Authorization", token)
+        init = appendHeaders("Authorization", token, init);
     }
-
-    return headers;
+    const result = fetch(input, init);
+    result.then(response => {
+        if (response.status === 401) {
+            store.dispatch(unregister());
+            window.location.href = "/";
+        }
+    })
+    return result;
 }
 
 interface TemplatesResponse {
@@ -28,9 +35,8 @@ interface TemplatesResponse {
 }
 
 export const registerUser = async (name: string): Promise<Registration> => {
-    const response = await fetch(`${url}/register`, {
+    const response = await authFetch(`${url}/register`, {
         method: "POST",
-        headers: getHeaders(),
         body: JSON.stringify({
             name: name
         })
@@ -40,18 +46,15 @@ export const registerUser = async (name: string): Promise<Registration> => {
 }
 
 export const getTemplates = async ():Promise<Template[]> => {
-    const response = await fetch(`${url}/rooms/templates`, {
-        headers: getAuthHeaders()
-    });
+    const response = await authFetch(`${url}/rooms/templates`);
     const templateResponse = await response.json() as TemplatesResponse;
     
     return templateResponse.templates;
 }
 
 export const createRoom = async (name: string, voteTemplate: number): Promise<IRoom> => {
-    const response = await fetch(`${url}/rooms`, {
+    const response = await authFetch(`${url}/rooms`, {
         method: "POST",
-        headers: getAuthHeaders(),
         body: JSON.stringify({
             name: name,
             voteTemplate: voteTemplate
@@ -61,16 +64,13 @@ export const createRoom = async (name: string, voteTemplate: number): Promise<IR
 }
 
 export const getRoom = async (id: string) => {
-    const response = await fetch(`${url}/rooms/${id}`, {
-        headers: getAuthHeaders()
-    });
+    const response = await authFetch(`${url}/rooms/${id}`);
     return await response.json();
 }
 
 export const voteRequest = async (id: string, value: number): Promise<VoteResponse> => {
-    const response = await fetch(`${url}/rooms/${id}/vote`, {
+    const response = await authFetch(`${url}/rooms/${id}/vote`, {
         method: "POST",
-        headers: getAuthHeaders(),
         body: JSON.stringify({
             value: value
         })
@@ -79,25 +79,22 @@ export const voteRequest = async (id: string, value: number): Promise<VoteRespon
 }
 
 export const endVote = async (id: string): Promise<IRoom> => {
-    const response = await fetch(`${url}/rooms/${id}/end`, {
+    const response = await authFetch(`${url}/rooms/${id}/end`, {
             method: "POST",
-            headers: getAuthHeaders()
         });
         return await response.json();
 }
 
 export const resetRoom = async (id: string): Promise<IRoom> => {
-    const response = await fetch(`${url}/rooms/${id}/reset`, {
-        method: 'POST',
-        headers: getAuthHeaders()
+    const response = await authFetch(`${url}/rooms/${id}/reset`, {
+        method: 'POST'
     });
     return await response.json();
 }
 
 export const leaveRoom = async(id: string) => {
-    const response = await fetch(`${url}/rooms/${id}/leave`, {
-        method: 'POST',
-        headers: getAuthHeaders()
+    const response = await authFetch(`${url}/rooms/${id}/leave`, {
+        method: 'POST'
     });
     return await response.json();
 }

@@ -8,9 +8,10 @@ const registrationSlice = createSlice({
     name: 'registration',
     initialState: initialState,
     reducers: {
-        register: (state, action) => action.payload
+        register: (state, action) => action.payload,
+        unregister: () => null
     }
 });
 
 export default registrationSlice.reducer;
-export const { register } = registrationSlice.actions;
+export const { register, unregister } = registrationSlice.actions;
