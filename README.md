@@ -1,46 +1,29 @@
-# Getting Started with Create React App
-
+# PoPlan - Planning poker
+This web application allows to use planning poker for estimating of tasks' complexity during the work on the project.\
+The API for the project is [here](https://github.com/violarium/poplan).\
+This project was built to practice working with **React**, **React router**, **Redux** and **TypeScript**.\
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Features
+The starting page shows the registration form
 
-## Available Scripts
+![Registration page](public/registration-page.png)
+or the form for creating new room for the voting if the user is logged in.
 
-In the project directory, you can run:
+![Page with the form for creating new room](public/create-room-form.png)
+When the room is created, the user is redirected to the room page. Following the link of the room page any user can join the voting in this room. Players pick the cards and can see only their own cards.
 
-### `npm start`
+![Room page](public/room-page.png)
+The owner of the room (the person who created it) can reveal the cards at any moment. When the cards are revealed the picking cards are unavailable.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![Room with revealed cards](public/revealed-cards.png)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+The owner of the room also can reset the room which reset the votes to start a new voting.
+## Technologies
+During the development of this project these technologies were used:
+* React 18.2.0
+* Redux 4.2.1
+* React-Redux 8.0.5
+* Redux toolkit 1.9.3
+* React router 6.8.2
+* TypeScript 4.9.5
+* WebSocket
