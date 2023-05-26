@@ -13,7 +13,7 @@ or the form for creating new room for the voting if the user is logged in.
 When the room is created, the user is redirected to the room page. Following the link of the room page any user can join the voting in this room. Players pick the cards and can see only their own cards.
 
 ![Room page](public/room-page.png)
-The owner of the room (the person who created it) can reveal the cards at any moment. When the cards are revealed the picking cards are unavailable.
+The owner of the room (the person who created it) can reveal the cards at any moment. When the cards are revealed the picking cards is unavailable.
 
 ![Room with revealed cards](public/revealed-cards.png)
 
