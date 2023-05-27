@@ -1,7 +1,7 @@
 # PoPlan - Planning poker
 This web application allows to use planning poker for estimating of tasks' complexity during the work on the project.\
 The API for the project is [here](https://github.com/violarium/poplan).\
-This project was built to practice working with **React**, **React router**, **Redux** and **TypeScript**.\
+This project was built to practice working with **React**, **React router**, **Redux** and **TypeScript**. It also uses **WebSocket** to allow real-time changes.\
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 ## Features
 The starting page shows the registration form
