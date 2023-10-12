@@ -27,3 +27,4 @@ During the development of this project these technologies were used:
 * React router 6.8.2
 * TypeScript 4.9.5
 * WebSocket
+* Tailwindcss 3.2.7
