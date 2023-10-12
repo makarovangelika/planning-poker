@@ -28,3 +28,6 @@ During the development of this project these technologies were used:
 * TypeScript 4.9.5
 * WebSocket
 * Tailwindcss 3.2.7
+## Usage
+In the project directory, you can run `npm start` to run the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
